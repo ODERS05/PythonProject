@@ -87,6 +87,7 @@ class Ship:
         if self.cool_down_counter == 0:
             laser = Laser(self.x - self.get_width() + 10, self.y - self.get_height(), self.laser_img)
             self.lasers.append(laser) 
+            pygame.mixer.Channel(0).play(LASER_SOUND, maxtime = 600)
             self.cool_down_counter = 1
 
     def get_width(self):
@@ -172,8 +173,6 @@ def main():
     
     clock = pygame.time.Clock()
 
-    sound_volume = 0.05
-    LASER_SOUND.set_volume(sound_volume)
     def redraw_window():
         WIN.blit(BG, (0, 0))
         # Display text
@@ -217,7 +216,7 @@ def main():
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                run = False
+                quit()
         keys = pygame.key.get_pressed() # Dictionary of all keys
         if keys[pygame.K_a] or keys[pygame.K_LEFT] and player.x - player_vel > 0: # left
             player.x -= player_vel
@@ -228,7 +227,6 @@ def main():
         if keys[pygame.K_d] or keys[pygame.K_RIGHT] and player.x + player_vel + player.get_width() < WIDTH: # right
             player.x += player_vel  
         if keys[pygame.K_SPACE]:
-            LASER_SOUND.play()
             player.shoot()
         for enemy in enemies:
             enemy.move(enemy_vel)
@@ -248,16 +246,17 @@ def main():
 
 def main_menu():
     title_font = pygame.font.SysFont("comicsans", 40)
+    title_font_small = pygame.font.SysFont("comicsans", 30)
     run = True
     sound_volume = 0.05
     GAME_SOUND.set_volume(sound_volume)
     while run:
-        GAME_SOUND.play()
+        GAME_SOUND.play(loops = -1)
         WIN.blit(BG, (0,0))
         title_label = title_font.render("Press the mouse to begin...", 1, (255,255,255))
-        WIN.blit(title_label, (WIDTH/2 - title_label.get_width()/2, 350))
-        title_label1 = title_font.render("or click X to close the game", 1, (255,255,255))
-        WIN.blit(title_label1, (WIDTH/2 - title_label.get_width()/2, 400))
+        WIN.blit(title_label, (WIDTH/2 - title_label.get_width()/2, 300))
+        title_label3 = title_font_small.render("Press the WASD or arrow keys to move", 1, (255,255,255))
+        WIN.blit(title_label3, (WIDTH/2 - title_label3.get_width()/2, 400))
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
