@@ -216,7 +216,7 @@ def main():
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                quit()
+                return 0
         keys = pygame.key.get_pressed() # Dictionary of all keys
         if keys[pygame.K_a] or keys[pygame.K_LEFT] and player.x - player_vel > 0: # left
             player.x -= player_vel
@@ -243,6 +243,7 @@ def main():
                 enemies.remove(enemy)  
                     
         player.move_lasers(-laser_vel, enemies)
+    pygame.quit()
 
 def main_menu():
     title_font = pygame.font.SysFont("comicsans", 40)
