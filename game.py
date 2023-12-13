@@ -28,17 +28,19 @@ PURPLE_LASER = pygame.image.load(os.path.join("bullets", "04.png"))
 # Background 
 BG = pygame.transform.scale(pygame.image.load(os.path.join("backgrounds", "river_background.png")), (WIDTH, HEIGHT))
 
-# SOUND
+# SOUNDS
 GAME_SOUND = pygame.mixer.Sound(os.path.join("sounds", "spaceship_shooter.mp3"))
 LASER_SOUND = pygame.mixer.Sound(os.path.join("sounds", "blaster.mp3"))
+
+#class for laser behavior
 class Laser:
-    def __init__(self, x, y, img):
+    def __init__(self, x, y, img): #initialize class 
         self.x = x
         self.y = y
         self.img = img
         self.mask = pygame.mask.from_surface(self.img)
     
-    def draw(self, window):
+    def draw(self, window): # draw lasers
         window.blit(self.img, (self.x, self.y))
     
     def move(self, vel):
@@ -52,7 +54,7 @@ class Laser:
 
 # class for  all ships behavior
 class Ship:
-    COOLDOWN = 15 
+    COOLDOWN = 15 # This is a class attribute, indicating the cooldown duration in frames.
     def __init__(self, x, y, health = 100):
         self.x = x
         self.y = y
@@ -68,7 +70,7 @@ class Ship:
             laser.draw(window)
 
     def move_lasers(self, vel, obj):
-        self.cooldown()
+        self.cooldown() # This method is called to update the cooldown counter
         for laser in self.lasers:
             laser.move(vel)
             if laser.off_screen(HEIGHT): # if hits window border
@@ -218,13 +220,13 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
         keys = pygame.key.get_pressed() # Dictionary of all keys
-        if keys[pygame.K_a] or keys[pygame.K_LEFT] and player.x - player_vel > 0: # left
+        if (keys[pygame.K_a]  or keys[pygame.K_LEFT]) and player.x - player_vel > 0: # left
             player.x -= player_vel
-        if keys[pygame.K_w] or keys[pygame.K_UP] and player.y - player_vel > 0: # up
+        if (keys[pygame.K_w] or keys[pygame.K_UP]) and player.y - player_vel > 0: # up
             player.y -= player_vel
-        if keys[pygame.K_s] or keys[pygame.K_DOWN] and player.y + player_vel + player.get_height() + 15 < HEIGHT: # down
+        if (keys[pygame.K_s] or keys[pygame.K_DOWN]) and player.y + player_vel + player.get_height() + 15 < HEIGHT: # down
             player.y += player_vel   
-        if keys[pygame.K_d] or keys[pygame.K_RIGHT] and player.x + player_vel + player.get_width() < WIDTH: # right
+        if (keys[pygame.K_d] or keys[pygame.K_RIGHT]) and player.x + player_vel + player.get_width() < WIDTH: # right
             player.x += player_vel  
         if keys[pygame.K_SPACE]:
             player.shoot()
